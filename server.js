@@ -3,6 +3,19 @@ const mongoose = require('mongoose');
 const app = express();
 const port = 3000;
 
+const cors = require('cors');
+
+// Aggiungi il middleware cors
+app.use(cors({
+    origin: 'https://capodanno.vercel.app', // Sostituisci con il dominio del tuo frontend
+    methods: ['GET', 'POST'], // Specifica i metodi consentiti
+    allowedHeaders: ['Content-Type'], // Specifica gli header consentiti
+}));
+
+app.use(cors());
+
+
+
 // Connessione a MongoDB con gestione degli errori
 mongoose.connect('mongodb+srv://squarcio21:<fPpSZqt4Q6CAxcYE>@capodanno.xikct.mongodb.net/?retryWrites=true&w=majority&appName=capodanno', {
     useNewUrlParser: true,
