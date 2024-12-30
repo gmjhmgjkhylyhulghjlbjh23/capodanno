@@ -99,7 +99,7 @@
         }
 
         function verifyQRCode(code) {
-            fetch("/verify", {
+            fetch("https://capodanno-7031.onrender.com/validate", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
