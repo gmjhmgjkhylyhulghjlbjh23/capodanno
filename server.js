@@ -1,3 +1,7 @@
+const express = require('express');
+const mongoose = require('mongoose'); // Assicurati che questa riga sia presente e corretta
+const app = express();
+const port = 3000;
 
 // Connessione a MongoDB con gestione degli errori
 mongoose.connect('mongodb+srv://squarcio21:<fPpSZqt4Q6CAxcYE>@capodanno.xikct.mongodb.net/?retryWrites=true&w=majority&appName=capodanno', {
