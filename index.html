@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capodanno - Verifica Codice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f0f0f0;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: #4CAF50;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            color: #555;
+        }
+
+        #input-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            font-size: 1.2rem;
+            margin-top: 20px;
+            width: 200px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            color: #fff;
+            background: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+
+        #result {
+            font-size: 1.5rem;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Capodanno Degustibus Ketchup</h1>
+        <p>Inserisci il tuo codice per verificare la prevendita.</p>
+    </header>
+
+    <div id="input-container">
+        <input type="text" id="codeInput" placeholder="Inserisci il codice">
+        <button onclick="validateCode()">Verifica Codice</button>
+    </div>
+
+    <p id="result"></p>
+
+    <script>
+        function validateCode() {
+            const code = document.getElementById('codeInput').value;
+            console.log("Verificando Codice:", code);
+
+            fetch("https://capodanno-7031.onrender.com/validate", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ qrCode: code })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("Risposta dal server:", data);
+                if (data.valid) {
+                    document.getElementById('result').textContent = "Codice valido! Benvenuto!";
+                } else {
+                    document.getElementById('result').textContent = "Codice non valido!";
+                }
+            })
+            .catch(error => {
+                console.error("Errore durante la verifica del codice:", error);
+                document.getElementById('result').textContent = "Errore durante la verifica.";
+            });
+        }
+    </script>
+</body>
+</html>
+
