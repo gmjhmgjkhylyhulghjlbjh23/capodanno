@@ -4,7 +4,7 @@ const app = express();
 const port = 3000;
 
 // Connessione a MongoDB con gestione degli errori
-mongoose.connect('mongodb+srv://squarcio21:<fPpSZqt4Q6CAxcYE>@capodanno.xikct.mongodb.net/?retryWrites=true&w=majority&appName=capodanno', {
+mongoose.connect('mongodb+srv://squarcio21:fPpSZqt4Q6CAxcYE@capodanno.xikct.mongodb.net/?retryWrites=true&w=majority&appName=capodanno', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => {
