@@ -67,64 +67,64 @@
     <header>
         <h1>Capodanno Degustibus Ketchup</h1>
         <p>Scansiona il tuo QR Code per verificare la prevendita.</p>
-        <a class="button" href="#" onclick="startScanner()">Verifica QR Code</a>
+        <a class="button" href="javascript:void(0);" onclick="startScanner()">Verifica QR Code</a>
     </header>
 
     <div id="reader"></div>
     <p id="result"></p>
 
+    <!-- Includi la libreria Html5Qrcode prima del tuo script -->
     <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
-   <script>
-    function startScanner() {
-        console.log("Iniziando lo scanner...");
-        const reader = document.getElementById('reader');
-        reader.style.display = 'block';
-        const html5QrCode = new Html5Qrcode("reader");
-        const resultElement = document.getElementById('result');
+    <script>
+        function startScanner() {
+            console.log("Iniziando lo scanner...");
+            const reader = document.getElementById('reader');
+            reader.style.display = 'block';
+            const html5QrCode = new Html5Qrcode("reader");
+            const resultElement = document.getElementById('result');
 
-        html5QrCode.start(
-            { facingMode: "environment" },
-            {
-                fps: 10,
-                qrbox: { width: 250, height: 250 }
-            },
-            qrCodeMessage => {
-                console.log("QR Code scansionato:", qrCodeMessage);
-                verifyQRCode(qrCodeMessage);
-            },
-            errorMessage => {
-                resultElement.textContent = "Scansione in corso...";
-                console.warn("Errore di scansione:", errorMessage);
-            }
-        ).catch(err => {
-            console.error("Errore avviando lo scanner:", err);
-        });
-    }
+            html5QrCode.start(
+                { facingMode: "environment" },
+                {
+                    fps: 10,
+                    qrbox: { width: 250, height: 250 }
+                },
+                qrCodeMessage => {
+                    console.log("QR Code scansionato:", qrCodeMessage);
+                    verifyQRCode(qrCodeMessage);
+                },
+                errorMessage => {
+                    resultElement.textContent = "Scansione in corso...";
+                    console.warn("Errore di scansione:", errorMessage);
+                }
+            ).catch(err => {
+                console.error("Errore avviando lo scanner:", err);
+            });
+        }
 
-    function verifyQRCode(code) {
-        console.log("Verificando QR Code:", code);
-        fetch("https://capodanno-7031.onrender.com/validate", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ qrCode: code })
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log("Risposta dal server:", data);
-            if (data.valid) {
-                document.getElementById('result').textContent = "QR Code valido! Benvenuto!";
-            } else {
-                document.getElementById('result').textContent = "QR Code non valido!";
-            }
-        })
-        .catch(error => {
-            console.error("Errore durante la verifica del QR Code:", error);
-            document.getElementById('result').textContent = "Errore durante la verifica.";
-        });
-    }
-</script>
-
+        function verifyQRCode(code) {
+            console.log("Verificando QR Code:", code);
+            fetch("https://capodanno-7031.onrender.com/validate", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ qrCode: code })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Risposta dal server:", data);
+                if (data.valid) {
+                    document.getElementById('result').textContent = "QR Code valido! Benvenuto!";
+                } else {
+                    document.getElementById('result').textContent = "QR Code non valido!";
+                }
+            })
+            .catch(error => {
+                console.error("Errore durante la verifica del QR Code:", error);
+                document.getElementById('result').textContent = "Errore durante la verifica.";
+            });
+        }
+    </script>
 </body>
 </html>
