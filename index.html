@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capodanno - Verifica QR Code</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f0f0f0;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: #4CAF50;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            color: #555;
+        }
+
+        a.button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            color: #fff;
+            background: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        a.button:hover {
+            background: #45a049;
+        }
+
+        #reader {
+            width: 300px;
+            height: 300px;
+            margin: 20px auto;
+            display: none;
+        }
+
+        #result {
+            font-size: 1.5rem;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Capodanno Degustibus Ketchup</h1>
+        <p>Scansiona il tuo QR Code per verificare la prevendita.</p>
+        <a class="button" href="#" onclick="startScanner()">Verifica QR Code</a>
+    </header>
+
+    <div id="reader"></div>
+    <p id="result"></p>
+
+    <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
+    <script>
+        function startScanner() {
+            const reader = document.getElementById('reader');
+            reader.style.display = 'block';
+            const html5QrCode = new Html5Qrcode("reader");
+            const resultElement = document.getElementById('result');
+
+            html5QrCode.start(
+                { facingMode: "environment" },
+                {
+                    fps: 10,
+                    qrbox: { width: 250, height: 250 }
+                },
+                qrCodeMessage => {
+                    verifyQRCode(qrCodeMessage);
+                },
+                errorMessage => {
+                    resultElement.textContent = "Scansione in corso...";
+                }
+            ).catch(err => {
+                console.error("Errore avviando lo scanner:", err);
+            });
+        }
+
+        function verifyQRCode(code) {
+            fetch("/verify", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ qrCode: code })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.valid) {
+                    document.getElementById('result').textContent = "QR Code valido! Benvenuto!";
+                } else {
+                    document.getElementById('result').textContent = "QR Code non valido!";
+                }
+            })
+            .catch(error => {
+                console.error("Errore durante la verifica del QR Code:", error);
+                document.getElementById('result').textContent = "Errore durante la verifica.";
+            });
+        }
+    </script>
+</body>
+</html>
