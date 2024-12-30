@@ -80,7 +80,7 @@
             console.log("Iniziando lo scanner...");
             const reader = document.getElementById('reader');
             reader.style.display = 'block';
-            const html5QrCode = new Html5Qrcode("reader");
+            const html5QrCode = new Html5Qrcode("reader"); // Assicurati che questo sia definito
             const resultElement = document.getElementById('result');
 
             html5QrCode.start(
@@ -128,3 +128,4 @@
     </script>
 </body>
 </html>
+
