@@ -4,7 +4,7 @@ const app = express();
 const port = 3000;
 
 // Connessione a MongoDB con gestione degli errori
-mongoose.connect('mongodb+srv://squarcio21:fPpSZqt4Q6CAxcYE@capodanno.xikct.mongodb.net/?retryWrites=true&w=majority&appName=capodanno', {
+mongoose.connect('mongodb+srv://squarcio21:<fPpSZqt4Q6CAxcYE>@capodanno.xikct.mongodb.net/?retryWrites=true&w=majority&appName=capodanno', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => {
@@ -25,6 +25,7 @@ app.use(express.json());
 
 app.post('/validate', async (req, res) => {
     try {
+        console.log('Ricevuta richiesta per convalidare il codice:', req.body.qrCode);
         const { qrCode } = req.body;
         const ticket = await Ticket.findOne({ qrCode });
         if (ticket && ticket.isValid) {
@@ -41,3 +42,4 @@ app.post('/validate', async (req, res) => {
 app.listen(port, () => {
     console.log(`Server in ascolto sulla porta ${port}`);
 });
+
