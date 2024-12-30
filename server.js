@@ -1,21 +1,29 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-
+const mongoose = require('mongoose'); // Aggiungi questa riga
 const app = express();
-app.use(bodyParser.json());
+const port = 3000;
 
-const validQRCodes = ['12345', 'abcde']; // Esempio di QR code validi
+mongoose.connect('mongodb+srv://squarcio21:<fPpSZqt4Q6CAxcYE>@capodanno.xikct.mongodb.net/?retryWrites=true&w=majority&appName=capodanno', { useNewUrlParser: true, useUnifiedTopology: true });
 
-app.post('/verify', (req, res) => {
+const ticketSchema = new mongoose.Schema({
+    qrCode: String,
+    isValid: Boolean
+});
+
+const Ticket = mongoose.model('Ticket', ticketSchema);
+
+app.use(express.json());
+
+app.post('/validate', async (req, res) => {
     const { qrCode } = req.body;
-    if (validQRCodes.includes(qrCode)) {
+    const ticket = await Ticket.findOne({ qrCode });
+    if (ticket && ticket.isValid) {
         res.json({ valid: true });
     } else {
         res.json({ valid: false });
     }
 });
 
-const PORT = 3000;
-app.listen(PORT, () => console.log(`Server in ascolto su http://localhost:${PORT}`));
-mongoose.connect("mongodb+srv://squarcio21:<fPpSZqt4Q6CAxcYE>@capodanno.xikct.mongodb.net/?retryWrites=true&w=majority&appName=capodanno",{ useNewUrlParser: true, useUnifiedTopology: true });
-
+app.listen(port, () => {
+    console.log(`Server in ascolto sulla porta ${port}`);
+});
